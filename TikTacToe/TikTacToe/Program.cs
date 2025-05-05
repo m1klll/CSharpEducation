@@ -48,10 +48,10 @@ class Program
         Console.WriteLine("-------------");
     }
 
-    static void StepPlayerX(string[,] gameBoard, int[][]playerSteps)
+    static void StepPlayer(string[,] gameBoard, string player, int[][]playerSteps)
     {
         PrintGameBoard(gameBoard);
-        Console.Write("Ход X. Выберите свободное поле: ");
+        Console.Write($"Ход {player}. Выберите свободное поле: ");
         string answer = Console.ReadLine();
         int row = (Convert.ToInt32(answer) - 1) / 3;
         int column = (Convert.ToInt32(answer) - 1) % 3;
@@ -61,40 +61,35 @@ class Program
         }
         else
         {
-            gameBoard[row, column] = "X";
-        }
-    }
-
-    static void StepPlayerO(string[,] gameBoard, int[][]playerSteps)
-    {
-        PrintGameBoard(gameBoard);
-        Console.Write("Ход 0. Выберите свободное поле: ");
-        string answer = Console.ReadLine();
-        Console.WriteLine(answer);
-        int row = (Convert.ToInt32(answer) - 1) / 3;
-        int column = (Convert.ToInt32(answer) - 1) % 3;
-        if (gameBoard[row, column] == "0" || gameBoard[row, column] == "X")
-        {
-            Console.WriteLine("Неверный ход!");
-        }
-        else
-        {
-            gameBoard[row, column] = "0";
+            if (player == "X")
+            {
+                gameBoard[row, column] = "X";
+            }
+            else
+            {
+                gameBoard[row, column] = "O";
+            }
         }
     }
     
     static string PlayGame(string[,] gameBoard)
     {
-        bool playerX = false;
-        bool playerO = false;
+        // символ игрока
+        string playerOne = "X";
+        string playerTwo = "O";
         
-        int[][] playerXSteps = new int[5][];
-        int[][] playerOSteps = new int[5][];
+        // победивший
+        bool playerOneWinner = false; 
+        bool playerTwoWinner = false;
         
-        while (playerX != true || playerO != true)
+        // шаги игрока
+        int[][] playerOneSteps = new int[5][];
+        int[][] playerTwoSteps = new int[5][];
+        
+        while (playerOneWinner != true || playerTwoWinner != true)
         {
-            StepPlayerX(gameBoard, playerXSteps);
-            StepPlayerO(gameBoard, playerOSteps);
+            StepPlayer(gameBoard, playerOne, playerOneSteps);
+            StepPlayer(gameBoard, playerTwo, playerTwoSteps);
             
         }
 
