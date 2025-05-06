@@ -10,7 +10,8 @@ class Program
         if (answer == "y")
         { 
             gameBoard = CreateGameBoard();
-            PlayGame(gameBoard);
+            string winner = PlayGame(gameBoard);
+            Console.WriteLine($"Победил игрок {winner}!");
         }
     }
 
@@ -48,7 +49,7 @@ class Program
         Console.WriteLine("-------------");
     }
 
-    static void StepPlayer(string[,] gameBoard, string player, int[][]playerSteps)
+    static bool StepPlayer(string[,] gameBoard, string player, int[]playerSteps, int playerStepCount)
     {
         PrintGameBoard(gameBoard);
         Console.Write($"Ход {player}. Выберите свободное поле: ");
@@ -64,12 +65,52 @@ class Program
             if (player == "X")
             {
                 gameBoard[row, column] = "X";
+                playerSteps[playerStepCount] = (row * 3 + column) + 1;
+                if (CheckWinner(playerSteps))
+                {
+                    
+                    return true;
+                }
             }
             else
             {
                 gameBoard[row, column] = "O";
+                playerSteps[playerStepCount] = (row * 3 + column) + 1;
+                if (CheckWinner(playerSteps))
+                {
+                    
+                    return true;
+                }
             }
         }
+        return false;
+    }
+
+    static bool CheckWinner(int[] playerSteps)
+    {
+        int[][] winCombinations = new int[][]
+        {
+            new int[] {1, 2, 3},  // горизонталь верх
+            new int[] {4, 5, 6},  // горизонталь середина
+            new int[] {7, 8, 9},  // горизонталь низ
+
+            new int[] {1, 4, 7},  // вертикаль левая
+            new int[] {2, 5, 8},  // вертикаль средняя
+            new int[] {3, 6, 9},  // вертикаль правая
+
+            new int[] {1, 5, 9},  // диагональ \
+            new int[] {3, 5, 7},  // диагональ /
+        };
+
+        foreach (var comb in winCombinations)
+        {
+            if (comb.All(step => playerSteps.Contains(step)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     static string PlayGame(string[,] gameBoard)
@@ -83,16 +124,32 @@ class Program
         bool playerTwoWinner = false;
         
         // шаги игрока
-        int[][] playerOneSteps = new int[5][];
-        int[][] playerTwoSteps = new int[5][];
+        int[] playerOneSteps = new int[5];
+        int[] playerTwoSteps = new int[5];
         
-        while (playerOneWinner != true || playerTwoWinner != true)
+        // количество шагов у игрока
+        int stepCountPlayerOne = 0;
+        int stepCountPlayerTwo = 0;
+        
+        while (true)
         {
-            StepPlayer(gameBoard, playerOne, playerOneSteps);
-            StepPlayer(gameBoard, playerTwo, playerTwoSteps);
+            playerOneWinner = StepPlayer(gameBoard, playerOne, playerOneSteps, stepCountPlayerOne);
             
+            if (playerOneWinner)
+            {
+                return "1";
+            }
+            
+            stepCountPlayerOne++;
+            
+            playerTwoWinner = StepPlayer(gameBoard, playerTwo, playerTwoSteps, stepCountPlayerTwo);
+            
+            if (playerTwoWinner)
+            {
+                return "2";
+            }
+            
+            stepCountPlayerTwo++;
         }
-
-        return "winner x";
     }
 }
