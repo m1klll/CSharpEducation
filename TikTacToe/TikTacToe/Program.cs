@@ -4,15 +4,33 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.Write("Хотите сыграть в игру? y/n: ");
-        string answer = Console.ReadLine();
-        string[,] gameBoard = null;
-        if (answer == "y")
-        { 
-            gameBoard = CreateGameBoard();
-            string winner = PlayGame(gameBoard);
-            Console.WriteLine($"Победил игрок {winner}!");
+        while (true)
+        {
+            Console.Write("Хотите сыграть в игру? y/n: ");
+            string answer = Console.ReadLine();
+            string[,] gameBoard = null;
+            if (answer == "y")
+            { 
+                gameBoard = CreateGameBoard();
+                string winner = PlayGame(gameBoard);
+                if (winner == "1" || winner == "2")
+                {
+                    Console.WriteLine($"Победил игрок {winner}!");
+                }
+                else
+                {
+                    Console.WriteLine("Ничья!");
+                }
+                
+            }
+            else
+            {
+                Console.WriteLine("До свидания!");
+                break;
+            }
         }
+        
+        
     }
 
     static string[,] CreateGameBoard()
@@ -52,16 +70,32 @@ class Program
     static bool StepPlayer(string[,] gameBoard, string player, int[]playerSteps, int playerStepCount)
     {
         PrintGameBoard(gameBoard);
-        Console.Write($"Ход {player}. Выберите свободное поле: ");
-        string answer = Console.ReadLine();
-        int row = (Convert.ToInt32(answer) - 1) / 3;
-        int column = (Convert.ToInt32(answer) - 1) % 3;
-        if (gameBoard[row, column] == "0" || gameBoard[row, column] == "X")
+        int row = -1;
+        int column = -1;
+        while (true)
         {
-            Console.WriteLine("Неверный ход!");
+            Console.Write($"Ход {player}. Выберите свободное поле: ");
+            string answer = Console.ReadLine();
+            
+            if (answer == "q")
+            {
+                break;
+            }
+            
+            if (int.TryParse(answer, out int playerStep))
+            {
+                row = (Convert.ToInt32(answer) - 1) / 3;
+                column = (Convert.ToInt32(answer) - 1) % 3;
+               
+                if ((playerStep < 0 || playerStep > 9) || (gameBoard[row, column] == "O" || gameBoard[row, column] == "X"))
+                {
+                    Console.WriteLine("Неверный ход. Повторите попытку или введите q чтобы завершить.");
+                    continue;
+                }
+            }
+            break;
         }
-        else
-        {
+        
             if (player == "X")
             {
                 gameBoard[row, column] = "X";
@@ -82,7 +116,6 @@ class Program
                     return true;
                 }
             }
-        }
         return false;
     }
 
@@ -142,6 +175,11 @@ class Program
             
             stepCountPlayerOne++;
             
+            if (stepCountPlayerOne + stepCountPlayerTwo  > 8)
+            {
+                return "3";
+            }
+            
             playerTwoWinner = StepPlayer(gameBoard, playerTwo, playerTwoSteps, stepCountPlayerTwo);
             
             if (playerTwoWinner)
@@ -150,6 +188,14 @@ class Program
             }
             
             stepCountPlayerTwo++;
+            
+            Console.WriteLine(stepCountPlayerOne);
+            Console.WriteLine(stepCountPlayerTwo);
+            
+            if (stepCountPlayerOne + stepCountPlayerTwo  > 8)
+            {
+                return "3";
+            }
         }
     }
 }
