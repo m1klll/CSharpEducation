@@ -84,14 +84,19 @@ class Program
             
             if (int.TryParse(answer, out int playerStep))
             {
-                row = (Convert.ToInt32(answer) - 1) / 3;
-                column = (Convert.ToInt32(answer) - 1) % 3;
+                row = (playerStep - 1) / 3;
+                column = (playerStep - 1) % 3;
                
                 if ((playerStep < 0 || playerStep > 9) || (gameBoard[row, column] == "O" || gameBoard[row, column] == "X"))
                 {
-                    Console.WriteLine("Неверный ход. Повторите попытку или введите q чтобы завершить.");
+                    Console.WriteLine("Неверный ход. Введите число от 1 до 9 или введите q чтобы завершить.");
                     continue;
                 }
+            }
+            else
+            {
+                Console.WriteLine("Введите число от 1 до 9 или введите q чтобы завершить.");
+                continue;
             }
             break;
         }
