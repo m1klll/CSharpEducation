@@ -98,7 +98,7 @@ class Program
         
             if (player == "X")
             {
-                gameBoard[row, column] = "X";
+                gameBoard[row, column] = "x";
                 playerSteps[playerStepCount] = (row * 3 + column) + 1;
                 if (CheckWinner(playerSteps))
                 {
@@ -108,7 +108,7 @@ class Program
             }
             else
             {
-                gameBoard[row, column] = "O";
+                gameBoard[row, column] = "o";
                 playerSteps[playerStepCount] = (row * 3 + column) + 1;
                 if (CheckWinner(playerSteps))
                 {
