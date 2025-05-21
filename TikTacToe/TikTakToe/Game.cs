@@ -1,39 +1,32 @@
-﻿namespace TikTacToe;
+namespace TikTacToe;
 
-class Program
+public class Game
 {
-    static void Main(string[] args)
-    {
-        while (true)
-        {
-            Console.Write("Хотите сыграть в игру? y/n: ");
-            string answer = Console.ReadLine();
-            string[,] gameBoard = null;
-            if (answer == "y")
-            { 
-                gameBoard = CreateGameBoard();
-                string winner = PlayGame(gameBoard);
-                if (winner == "1" || winner == "2")
-                {
-                    Console.WriteLine($"Победил игрок {winner}!");
-                }
-                else
-                {
-                    Console.WriteLine("Ничья!");
-                }
-                
-            }
-            else
-            {
-                Console.WriteLine("До свидания!");
-                break;
-            }
-        }
-        
-        
-    }
+    private const string POLE = "-------------";
+    public const string PLAYER_X = "X";
+    public const string PLAYER_O = "O";
+    
+    private static string[,] gameBoard;
+    
+    private int stepCountPlayerOne;
+    private int stepCountPlayerTwo;
+    
+    private int[] playerOneSteps;
+    private int[] playerTwoSteps;
+    
+    public static bool gameIsActive;
 
-    static string[,] CreateGameBoard()
+    public Game()
+    {
+        gameBoard = CreateGameBoard();
+        stepCountPlayerOne = 0;
+        stepCountPlayerTwo = 0;
+        playerOneSteps = new int[5];
+        playerTwoSteps = new int[5];
+        gameIsActive = true;
+    }
+    
+    private string[,] CreateGameBoard()
     {
         string[,] gameBoard = new string[3, 3];
         
@@ -52,9 +45,9 @@ class Program
         return gameBoard;
     }
 
-    static void PrintGameBoard(string[,] gameBoard)
+    static void PrintGameBoard()
     {
-        Console.WriteLine("-------------");
+        Console.WriteLine(POLE);
         for (int i = 0; i < gameBoard.GetLength(0); i++)
         {
             Console.Write("| ");
@@ -64,12 +57,12 @@ class Program
             }
             Console.WriteLine();
         }
-        Console.WriteLine("-------------");
+        Console.WriteLine(POLE);
     }
-
-    static bool StepPlayer(string[,] gameBoard, string player, int[]playerSteps, int playerStepCount)
+    
+    static bool StepPlayer(string player, int[]playerSteps, int playerStepCount)
     {
-        PrintGameBoard(gameBoard);
+        PrintGameBoard();
         int row = -1;
         int column = -1;
         while (true)
@@ -87,7 +80,7 @@ class Program
                 row = (playerStep - 1) / 3;
                 column = (playerStep - 1) % 3;
                
-                if ((playerStep < 0 || playerStep > 9) || (gameBoard[row, column] == "O" || gameBoard[row, column] == "X"))
+                if ((playerStep < 0 || playerStep > 9) || (gameBoard[row, column] == PLAYER_O || gameBoard[row, column] == PLAYER_X))
                 {
                     Console.WriteLine("Неверный ход. Введите число от 1 до 9 или введите q чтобы завершить.");
                     continue;
@@ -101,9 +94,9 @@ class Program
             break;
         }
         
-            if (player == "X")
+            if (player == PLAYER_X)
             {
-                gameBoard[row, column] = "x";
+                gameBoard[row, column] = PLAYER_X;
                 playerSteps[playerStepCount] = (row * 3 + column) + 1;
                 if (CheckWinner(playerSteps))
                 {
@@ -113,7 +106,7 @@ class Program
             }
             else
             {
-                gameBoard[row, column] = "o";
+                gameBoard[row, column] = PLAYER_O;
                 playerSteps[playerStepCount] = (row * 3 + column) + 1;
                 if (CheckWinner(playerSteps))
                 {
@@ -144,6 +137,7 @@ class Program
         {
             if (comb.All(step => playerSteps.Contains(step)))
             {
+                gameIsActive = false;
                 return true;
             }
         }
@@ -151,31 +145,19 @@ class Program
         return false;
     }
     
-    static string PlayGame(string[,] gameBoard)
+    public string PlayGame()
     {
-        // символ игрока
-        string playerOne = "X";
-        string playerTwo = "O";
-        
-        // победивший
+        gameIsActive = true;
         bool playerOneWinner = false; 
         bool playerTwoWinner = false;
         
-        // шаги игрока
-        int[] playerOneSteps = new int[5];
-        int[] playerTwoSteps = new int[5];
-        
-        // количество шагов у игрока
-        int stepCountPlayerOne = 0;
-        int stepCountPlayerTwo = 0;
-        
-        while (true)
+        while (gameIsActive)
         {
-            playerOneWinner = StepPlayer(gameBoard, playerOne, playerOneSteps, stepCountPlayerOne);
+            playerOneWinner = StepPlayer(PLAYER_X, playerOneSteps, stepCountPlayerOne);
             
             if (playerOneWinner)
             {
-                return "1";
+                return PLAYER_X;
             }
             
             stepCountPlayerOne++;
@@ -185,11 +167,11 @@ class Program
                 return "3";
             }
             
-            playerTwoWinner = StepPlayer(gameBoard, playerTwo, playerTwoSteps, stepCountPlayerTwo);
+            playerTwoWinner = StepPlayer(PLAYER_O, playerTwoSteps, stepCountPlayerTwo);
             
             if (playerTwoWinner)
             {
-                return "2";
+                return PLAYER_O;
             }
             
             stepCountPlayerTwo++;
@@ -202,5 +184,7 @@ class Program
                 return "3";
             }
         }
+        return "3";
     }
+
 }
