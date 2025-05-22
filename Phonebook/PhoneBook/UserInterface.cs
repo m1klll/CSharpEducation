@@ -11,7 +11,16 @@ public class UserInterface
             switch (UserInput)
             {
                 case 1:
-                    Phonebook.SaveAbonent();
+                    Phonebook.Name = GetName();
+                    Phonebook.Phone = GetPhone();
+                    
+                    Phonebook.SaveAbonent(Phonebook.Name, Phonebook.Phone);
+                    break;
+                case 2:
+                    string phone = GetPhone();
+                    string name = Phonebook.GetAbonentByPhone(phone);
+                    
+                    Console.WriteLine($"Имя {name}, телефон: {phone}");
                     break;
             }
         }
@@ -32,9 +41,9 @@ public class UserInterface
 
         if (int.TryParse(Console.ReadLine(), out int number))
         {
-            if (number < 1 || number > 4)
+            if (number < 0 || number > 4)
             {
-                Console.WriteLine("Ошибка. Число от 1 до 4.");
+                Console.WriteLine("Ошибка. Число от 0 до 4.");
                 return GetUserChoise();
             }
             else
@@ -47,6 +56,17 @@ public class UserInterface
             Console.WriteLine("Ошибка. Введите целое число.");
             return GetUserChoise();
         }
+    }
+
+    private static string GetName()
+    {
+        Console.WriteLine("Введите имя абонента: ");
+        return Console.ReadLine();
+    }
+    private static string GetPhone()
+    {
+        Console.WriteLine("Введите номер телефона: ");
+        return Console.ReadLine();
     }
     
 
