@@ -13,14 +13,14 @@ public class Phonebook
     /// Список абонентов.
     /// Хранится в формате имя;телефон
     /// </summary>
-    List<string> PhoneBooksList;
+    List<Abonent> PhoneBooksList;
 
     /// <summary>
     /// Конструктор
     /// </summary>
     private Phonebook()
     {
-        PhoneBooksList = new List<string>();
+        PhoneBooksList = new List<Abonent>();
     }
     public static Phonebook getInstance()
     {
@@ -38,21 +38,23 @@ public class Phonebook
     /// <param name="Phone">Телефон</param>
     public void SaveAbonent(string Name, string Phone)
     {
-        PhoneBooksList.Add(Name + ";" + Phone);
+        Abonent ab = new Abonent(Name, Phone);
+        PhoneBooksList.Add(ab);
     }
-
-    public string GetAbonentByPhone(string phone)
+/// <summary>
+/// Получение абонента по номеру телефона
+/// </summary>
+/// <param name="phone"></param>
+/// <returns></returns>
+    public Abonent GetAbonentByPhone(string phone)
     {
-        foreach (var item in PhoneBooksList)
+        foreach (var ab in PhoneBooksList)
         {
-            var abonent = item.Split(';');
-            if (abonent[1] == phone)
+            if (ab.Phone == phone)
             {
-                return abonent[0];
+                return ab;
             }
-            
-
         }
-        return "";
+        return null;
     }
 }

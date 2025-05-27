@@ -18,9 +18,17 @@ public class UserInterface
                     break;
                 case 2:
                     string phone = GetPhone();
-                    string name = Phonebook.GetAbonentByPhone(phone);
+                    Abonent ab = Phonebook.GetAbonentByPhone(phone);
+                    if (ab != null)
+                    {
+                        Console.WriteLine($"Имя {ab.Name}, телефон: {ab.Phone}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Абонент не найден");
+                    }
                     
-                    Console.WriteLine($"Имя {name}, телефон: {phone}");
+                    
                     break;
             }
         }
