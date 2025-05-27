@@ -5,6 +5,8 @@ public class Phonebook
     public string Name { get; set; }
     public string Phone { get; set; }
     
+    private const string file = "abonents.txt";
+    
     /// <summary>
     /// Статичное поле для singletone.
     /// </summary>
@@ -19,7 +21,7 @@ public class Phonebook
     /// </summary>
     private Phonebook()
     {
-        PhoneBooksList = new List<Abonent>();
+        PhoneBooksList = GetListAbonentFromTxt();
     }
     public static Phonebook getInstance()
     {
@@ -100,5 +102,41 @@ public class Phonebook
             }
         }
         return false;
+    }
+    
+    private List<Abonent> GetListAbonentFromTxt()
+    {
+        List<Abonent> list = new List<Abonent>();
+
+        if (!File.Exists(file))
+        {
+            Console.WriteLine("Файла с абонентами не существует. Будет создан новый список.");
+            return list;
+        }
+
+        using (StreamReader reader = new StreamReader(file))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                var parts = line.Split(';');
+                var ab = new Abonent(parts[0], parts[1]);
+                list.Add(ab);
+            }
+        }
+        return list;
+
+    }
+
+    public void SaveListToTxt()
+    {
+        
+        using (StreamWriter writer = new StreamWriter((file), true))
+        {
+            foreach (var ab in PhoneBooksList)
+            {
+                writer.WriteLine(ab.Name + ";" + ab.Phone);
+            }
+        }
     }
 }

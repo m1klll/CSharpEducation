@@ -9,6 +9,7 @@ public class UserInterface
         Phonebook Phonebook = Phonebook.getInstance();
         Abonent ab = new Abonent();
         int UserInput;
+        
         while ((UserInput = GetUserChoiseFromMainMenu()) != 0)
         {
             switch (UserInput)
@@ -79,6 +80,7 @@ public class UserInterface
                 }
             }
         }
+        Phonebook.SaveListToTxt();
     }
     
     /// <summary>
