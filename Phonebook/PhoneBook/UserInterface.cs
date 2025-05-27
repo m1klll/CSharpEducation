@@ -5,31 +5,38 @@ public class UserInterface
     public static void Start()
     {
         Phonebook Phonebook = Phonebook.getInstance();
+        Abonent ab = new Abonent();
         int UserInput;
         while ((UserInput = GetUserChoise()) != 0)
         {
             switch (UserInput)
             {
                 case 1:
-                    Phonebook.Name = GetName();
-                    Phonebook.Phone = GetPhone();
+                    Phonebook.Name = GetNameByUserInput();
+                    Phonebook.Phone = GetPhoneByUserInput();
                     
                     Phonebook.SaveAbonent(Phonebook.Name, Phonebook.Phone);
                     break;
                 case 2:
-                    string phone = GetPhone();
-                    Abonent ab = Phonebook.GetAbonentByPhone(phone);
-                    if (ab != null)
-                    {
-                        Console.WriteLine($"Имя {ab.Name}, телефон: {ab.Phone}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Абонент не найден");
-                    }
-                    
-                    
+                    string phone = GetPhoneByUserInput();
+                    ab = Phonebook.GetAbonentByPhone(phone);
                     break;
+                case 3:
+                    string name = GetNameByUserInput();
+                    ab = Phonebook.GetAbonentByName(name);
+                    break;
+            }
+
+            if ((UserInput == 2 || UserInput == 3))
+            {
+                if (ab != null)
+                {
+                    Console.WriteLine($"Имя: {ab.Name}. Телефон: {ab.Phone}");
+                }
+                else
+                {
+                    Console.WriteLine("Абонент не найден.");
+                }
             }
         }
     }
@@ -66,12 +73,12 @@ public class UserInterface
         }
     }
 
-    private static string GetName()
+    private static string GetNameByUserInput()
     {
         Console.WriteLine("Введите имя абонента: ");
         return Console.ReadLine();
     }
-    private static string GetPhone()
+    private static string GetPhoneByUserInput()
     {
         Console.WriteLine("Введите номер телефона: ");
         return Console.ReadLine();

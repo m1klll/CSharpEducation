@@ -44,8 +44,8 @@ public class Phonebook
 /// <summary>
 /// Получение абонента по номеру телефона
 /// </summary>
-/// <param name="phone"></param>
-/// <returns></returns>
+/// <param name="phone">Телефон</param>
+/// <returns>Abonent or null</returns>
     public Abonent GetAbonentByPhone(string phone)
     {
         foreach (var ab in PhoneBooksList)
@@ -57,4 +57,17 @@ public class Phonebook
         }
         return null;
     }
+
+    public Abonent GetAbonentByName(string name)
+    {
+        foreach (var ab in PhoneBooksList)
+        {
+            if (ab.Name == name)
+            {
+                return ab;
+            }
+        }
+        return null;
+    }
+
 }
