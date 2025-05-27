@@ -4,6 +4,9 @@ namespace PhoneBook;
 
 public class UserInterface
 {
+    /// <summary>
+    /// Главная логика
+    /// </summary>
     public static void Start()
     {
         Phonebook Phonebook = Phonebook.getInstance();
@@ -135,6 +138,10 @@ public class UserInterface
         return Console.ReadLine();
     }
 
+    /// <summary>
+    /// Получение ввода и ответа от пользователя при удалении абонента.
+    /// </summary>
+    /// <returns>string value, string choise</returns>
     private static (string, string) GetUserChoiseFromDeleteMenu()
     {
         Console.WriteLine("Как удалить абонента?\n1. По номеру телефона.\n2. По имени.\n0. Возврат в меню.");

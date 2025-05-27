@@ -49,11 +49,12 @@ public class Phonebook
             Console.WriteLine("Абонент уже существует.");
         }
     }
-/// <summary>
-/// Получение абонента по номеру телефона
-/// </summary>
-/// <param name="phone">Телефон</param>
-/// <returns>Abonent or null</returns>
+    
+    /// <summary>
+    /// Получение абонента по номеру телефона
+    /// </summary>
+    /// <param name="phone">Телефон</param>
+    /// <returns>Abonent or null</returns>
     public Abonent GetAbonentByPhone(string phone)
     {
         foreach (var ab in PhoneBooksList)
@@ -65,7 +66,12 @@ public class Phonebook
         }
         return null;
     }
-
+    
+    /// <summary>
+    /// Получение абонента по имени
+    /// </summary>
+    /// <param name="name">Имя</param>
+    /// <returns>Abonent</returns>
     public Abonent GetAbonentByName(string name)
     {
         foreach (var ab in PhoneBooksList)
@@ -77,7 +83,11 @@ public class Phonebook
         }
         return null;
     }
-
+    
+    /// <summary>
+    /// Удаление абонента из списка.
+    /// </summary>
+    /// <param name="ab">Abonent</param>
     public void DeleteAbonent(Abonent ab)
     {
         if (PhoneBooksList.Contains(ab))
@@ -92,6 +102,11 @@ public class Phonebook
         
     }
 
+    /// <summary>
+    /// Проверка на существование абонента в списке.
+    /// </summary>
+    /// <param name="abonent">Abonent</param>
+    /// <returns>true - если существует. false - если нет.</returns>
     private bool CheckExistsAbonentInList(Abonent abonent)
     {
         foreach (var ab in PhoneBooksList)
@@ -104,6 +119,10 @@ public class Phonebook
         return false;
     }
     
+    /// <summary>
+    /// Получение списка пользователей из TXT в формате name;phone
+    /// </summary>
+    /// <returns></returns>
     private List<Abonent> GetListAbonentFromTxt()
     {
         List<Abonent> list = new List<Abonent>();
@@ -128,6 +147,9 @@ public class Phonebook
 
     }
 
+    /// <summary>
+    /// Сохранение в TXT файл. Запускается при завершении программы.
+    /// </summary>
     public void SaveListToTxt()
     {
         
