@@ -11,7 +11,6 @@ public class Phonebook
     private static Phonebook _instance;
     /// <summary>
     /// Список абонентов.
-    /// Хранится в формате имя;телефон
     /// </summary>
     List<Abonent> PhoneBooksList;
 
@@ -39,7 +38,14 @@ public class Phonebook
     public void SaveAbonent(string Name, string Phone)
     {
         Abonent ab = new Abonent(Name, Phone);
-        PhoneBooksList.Add(ab);
+        if (!CheckExistsAbonentInList(ab))
+        {
+            PhoneBooksList.Add(ab);
+        }
+        else
+        {
+            Console.WriteLine("Абонент уже существует.");
+        }
     }
 /// <summary>
 /// Получение абонента по номеру телефона
@@ -82,5 +88,17 @@ public class Phonebook
             Console.WriteLine($"Абонента {ab.Name} с номером {ab.Phone} не существует.");
         }
         
+    }
+
+    private bool CheckExistsAbonentInList(Abonent abonent)
+    {
+        foreach (var ab in PhoneBooksList)
+        {
+            if (ab.Name == abonent.Name && ab.Phone == abonent.Phone)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
