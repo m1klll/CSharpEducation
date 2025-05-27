@@ -1,3 +1,5 @@
+using System.Xml;
+
 namespace PhoneBook;
 
 public class UserInterface
@@ -7,7 +9,7 @@ public class UserInterface
         Phonebook Phonebook = Phonebook.getInstance();
         Abonent ab = new Abonent();
         int UserInput;
-        while ((UserInput = GetUserChoise()) != 0)
+        while ((UserInput = GetUserChoiseFromMainMenu()) != 0)
         {
             switch (UserInput)
             {
@@ -18,13 +20,51 @@ public class UserInterface
                     Phonebook.SaveAbonent(Phonebook.Name, Phonebook.Phone);
                     break;
                 case 2:
-                    string phone = GetPhoneByUserInput();
-                    ab = Phonebook.GetAbonentByPhone(phone);
+                    Phonebook.Phone = GetPhoneByUserInput();
+                    ab = Phonebook.GetAbonentByPhone(Phonebook.Phone);
                     break;
                 case 3:
-                    string name = GetNameByUserInput();
-                    ab = Phonebook.GetAbonentByName(name);
+                    Phonebook.Name = GetNameByUserInput();
+                    ab = Phonebook.GetAbonentByName(Phonebook.Name);
                     break;
+                case 4:
+                    var (value, choise) = GetUserChoiseFromDeleteMenu();
+                    if (choise == "0")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        switch (choise)
+                        {
+                            case "1":
+                                ab = Phonebook.GetAbonentByPhone(value);
+                                if (ab != null)
+                                {
+                                    Phonebook.DeleteAbonent(ab);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Абонент не найден.");
+                                }
+                                
+                                break;
+                            case "2":
+                                ab = Phonebook.GetAbonentByName(value);
+                                if (ab != null)
+                                {
+                                    Phonebook.DeleteAbonent(ab);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Абонент не найден.");
+                                }
+                                break;
+                        }
+                        break;
+                    }
+
+
             }
 
             if ((UserInput == 2 || UserInput == 3))
@@ -45,9 +85,9 @@ public class UserInterface
     /// Получение пользовательского ответа.
     /// </summary>
     /// <returns>int [1-4]</returns>
-    public static int GetUserChoise()
+    private static int GetUserChoiseFromMainMenu()
     {
-        Console.WriteLine(@"Phonebook
+        Console.WriteLine(@"Меню.
 1. Добавить абонента.
 2. Получить абонента по номеру телефона.
 3. Получить номер телефона по имени.
@@ -59,7 +99,7 @@ public class UserInterface
             if (number < 0 || number > 4)
             {
                 Console.WriteLine("Ошибка. Число от 0 до 4.");
-                return GetUserChoise();
+                return GetUserChoiseFromMainMenu();
             }
             else
             {
@@ -69,19 +109,47 @@ public class UserInterface
         else
         {
             Console.WriteLine("Ошибка. Введите целое число.");
-            return GetUserChoise();
+            return GetUserChoiseFromMainMenu();
         }
     }
 
+    /// <summary>
+    /// Получение имени от пользователя
+    /// </summary>
+    /// <returns></returns>
     private static string GetNameByUserInput()
     {
         Console.WriteLine("Введите имя абонента: ");
         return Console.ReadLine();
     }
+    
+    /// <summary>
+    /// Получение телефона от пользователя
+    /// </summary>
+    /// <returns></returns>
     private static string GetPhoneByUserInput()
     {
         Console.WriteLine("Введите номер телефона: ");
         return Console.ReadLine();
+    }
+
+    private static (string, string) GetUserChoiseFromDeleteMenu()
+    {
+        Console.WriteLine("Как удалить абонента?\n1. По номеру телефона.\n2. По имени.\n0. Возврат в меню.");
+        string input = Console.ReadLine();
+
+        switch (input)
+        {
+            case "1":
+                return (GetPhoneByUserInput(), input);
+            case "2":
+                return (GetNameByUserInput(), input);
+            case "0":
+                return ("", input);
+            default:
+                Console.WriteLine("Вы ввели неверное значение.");
+                return GetUserChoiseFromDeleteMenu();
+        }
     }
     
 

@@ -70,4 +70,17 @@ public class Phonebook
         return null;
     }
 
+    public void DeleteAbonent(Abonent ab)
+    {
+        if (PhoneBooksList.Contains(ab))
+        {
+            PhoneBooksList.Remove(ab);
+            Console.WriteLine($"Абонент {ab.Name} с номером {ab.Phone} удален.");
+        }
+        else
+        {
+            Console.WriteLine($"Абонента {ab.Name} с номером {ab.Phone} не существует.");
+        }
+        
+    }
 }
